@@ -14,7 +14,7 @@ The routes are protected and each one needs a token.
 <br />
 To get the token, call the route:
 <br />
-http://localhost:3000/user/authenticate
+http://localhost:3000/authenticate
 <br />
 using POST method, passing in Body this fixed content:
 <br />

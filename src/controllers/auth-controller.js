@@ -1,12 +1,11 @@
-const repository = require('../repositories/user-repository');
+const repository = require('../repositories/auth-repository');
 const authService = require('../services/auth-service');
 
 exports.authenticate = async(req, res, next) => {
     try {        
         const username = req.body.username;
         const password = req.body.password;
-        let company;
-        let dateOfBirth;
+        let name, company, role, dateOfBirth;
 
         let user = await repository.authenticateUser({
             username: username,
@@ -22,20 +21,24 @@ exports.authenticate = async(req, res, next) => {
         else
         {
             user = JSON.parse(user);
+            name = user.name;
             company = user.company;
+            role = user.role;
             dateOfBirth = user.dateOfBirth;
         }
+
         const token = await authService.generateToken({            
-            username: username,
-            company: company,
-            dateOfBirth: dateOfBirth
+            name: name,            
+            role: role
         });
 
         res.status(201).send({
             token: token,
             data: {
+                name: name,
                 username: username,
                 company: company,
+                role: role,
                 dateOfBirth: dateOfBirth
             }
         });
@@ -45,4 +48,3 @@ exports.authenticate = async(req, res, next) => {
         });
     }
 };
-
